@@ -8,6 +8,10 @@ public interface ExerciseSetService {
 
 	ExerciseSet findById(int id);
 
-	List<ExerciseSet> findAll();
+	List<ExerciseSet> index();
+
+	List<ExerciseSet> findByExerciseName(String name);
+
+	ExerciseSet addSet(ExerciseSet set);
 
 }

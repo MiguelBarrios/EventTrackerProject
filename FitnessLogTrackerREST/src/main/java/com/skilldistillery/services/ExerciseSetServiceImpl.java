@@ -21,7 +21,18 @@ public class ExerciseSetServiceImpl implements ExerciseSetService {
 	}
 	
 	@Override
-	public List<ExerciseSet> findAll(){
+	public List<ExerciseSet> index(){
 		return exerciseRepo.findAll();
 	}
+	
+	@Override 
+	public List<ExerciseSet> findByExerciseName(String name){
+		return exerciseRepo.findByExerciseName(name);
+	}
+	
+	@Override
+	public ExerciseSet addSet(ExerciseSet set) {
+		return exerciseRepo.saveAndFlush(set);
+	}
+	
 }
