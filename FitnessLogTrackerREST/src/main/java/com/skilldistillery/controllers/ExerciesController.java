@@ -2,6 +2,7 @@ package com.skilldistillery.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +31,45 @@ public class ExerciesController {
 	}
 	
 	@GetMapping("exerciseset/{id}")
-	public ExerciseSet findSet(@PathVariable Integer id) {
-		return service.findById(id);
-	}
-	
-	@GetMapping("exerciseset/findbyname/{name}")
-	public List<ExerciseSet> findByExerciseName(@PathVariable String name) {
-		return service.findByExerciseName(name);
+	public ExerciseSet findSet(@PathVariable Integer id, HttpServletResponse resp) {
+		ExerciseSet res = service.findById(id);
+		if(res == null) {
+			resp.setStatus(404);
+		}
+		return res;
 	}
 	
 	@PostMapping("exerciseset")
-	public ExerciseSet addSet(@RequestBody ExerciseSet exerciseSet) {
-		return service.create(exerciseSet);
+	public ExerciseSet addSet(@RequestBody ExerciseSet exerciseSet, HttpServletResponse resp, HttpServletRequest req) {
+		exerciseSet = service.create(exerciseSet);
+		if(exerciseSet == null) {
+			resp.setStatus(404);
+		}
+		else {
+			resp.setStatus(201);
+			StringBuffer url = req.getRequestURL();
+			url.append("/").append(exerciseSet.getId());
+			resp.setHeader("Location", url.toString());
+		}
+		return exerciseSet;
 	}
 	
 	@PutMapping("exerciseset/{id}")
-	public ExerciseSet updateSet(@RequestBody ExerciseSet exerciseSet, @PathVariable Integer id) {
-		return service.update(exerciseSet, id);
+	public ExerciseSet updateSet(@RequestBody ExerciseSet exerciseSet, @PathVariable Integer id, HttpServletResponse resp) {
+		
+		try {
+			exerciseSet =  service.update(exerciseSet, id);
+			if(exerciseSet == null) {
+				resp.setStatus(404);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.setStatus(400);
+			exerciseSet = null;
+		}
+		
+		
+		return exerciseSet;
 	}
 	
 	@DeleteMapping("exerciseset/{id}")
