@@ -2,7 +2,10 @@ package com.skilldistillery.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +24,7 @@ public class ExerciesController {
 	@Autowired
 	private ExerciseSetService service;
 	
-	@GetMapping("exerciseset/all")
+	@GetMapping("exerciseset")
 	public List<ExerciseSet> index(){
 		return service.index();
 	}
@@ -44,6 +47,16 @@ public class ExerciesController {
 	@PutMapping("exerciseset/{id}")
 	public ExerciseSet updateSet(@RequestBody ExerciseSet exerciseSet, @PathVariable Integer id) {
 		return service.update(exerciseSet, id);
+	}
+	
+	@DeleteMapping("exerciseset/{id}")
+	public void deleteSet(@PathVariable Integer id, HttpServletResponse res) {
+		boolean deleted = service.delete(id);
+		if(deleted) {
+			res.setStatus(200);
+		}else {
+			res.setStatus(404);
+		}
 	}
 	
 	

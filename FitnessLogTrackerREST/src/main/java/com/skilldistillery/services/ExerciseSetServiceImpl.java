@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.skilldistillery.entities.ExerciseSet;
 import com.skilldistillery.repositories.ExerciseSetRepository;
 
@@ -45,6 +46,17 @@ public class ExerciseSetServiceImpl implements ExerciseSetService {
 		managed.setWeight(set.getWeight());
 		exerciseRepo.saveAndFlush(managed);
 		return managed;
+	}
+	
+	@Override
+	public boolean delete(int id) {
+		ExerciseSet set = this.findById(id);
+		if(set != null) {
+			exerciseRepo.delete(set);
+			exerciseRepo.flush();
+			return true;
+		}
+		return false;
 	}
 	
 }

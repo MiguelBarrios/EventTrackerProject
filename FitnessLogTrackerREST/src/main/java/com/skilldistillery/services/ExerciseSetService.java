@@ -16,4 +16,6 @@ public interface ExerciseSetService {
 
 	ExerciseSet update(ExerciseSet set, int id);
 
+	boolean delete(int id);
+
 }
