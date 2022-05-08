@@ -9,21 +9,21 @@ containing exercise activity information.
 ## REST API Request's
 
 #### Get event by event id
-`GET /exerciseset/{id}`
+`GET api/exerciseset/{id}`
 
 
 #### Get all events in database
-`GET /exerciseset`
+`GET api/exerciseset`
 
 
 #### Create new event
-`POST /exerciseset`
+`POST api/exerciseset`
 
 #### Update event
-`PUT /exerciseset/{id}`
+`PUT api/exerciseset/{id}`
 
 #### Delete event
-`DELETE /exerciseset/{id}`
+`DELETE api/exerciseset/{id}`
 
 ## Technologies Used
 - Spring Boot
