@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name="exercise_set")
 public class ExerciseSet {
@@ -25,6 +27,7 @@ public class ExerciseSet {
 	
 	private String type;
 	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime datetime;
 
 	public ExerciseSet() {}
@@ -65,12 +68,12 @@ public class ExerciseSet {
 		this.type = type;
 	}
 
-	public LocalDateTime getDatatime() {
+	public LocalDateTime getDatetime() {
 		return datetime;
 	}
 
-	public void setDatatime(LocalDateTime datatime) {
-		this.datetime = datatime;
+	public void setDatetime(LocalDateTime datetime) {
+		this.datetime = datetime;
 	}
 
 	public void setId(int id) {

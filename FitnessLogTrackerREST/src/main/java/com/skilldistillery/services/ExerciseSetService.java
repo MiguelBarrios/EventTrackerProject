@@ -12,6 +12,6 @@ public interface ExerciseSetService {
 
 	List<ExerciseSet> findByExerciseName(String name);
 
-	ExerciseSet addSet(ExerciseSet set);
+	ExerciseSet create(ExerciseSet set);
 
 }

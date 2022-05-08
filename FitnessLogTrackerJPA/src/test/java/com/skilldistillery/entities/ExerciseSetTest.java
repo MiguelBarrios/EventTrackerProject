@@ -45,7 +45,7 @@ class ExerciseSetTest {
 	@Test
 	void test_basic_exercise_mapping() {
 		assertNotNull(exerciseSet);
-		assertEquals(exerciseSet.getExerciseName(), "BENCH PRESS");
+		assertEquals(exerciseSet.getExerciseName(), "Bench Press");
 		assertEquals(exerciseSet.getWeight(), 135);
 	}
 	

@@ -31,7 +31,7 @@ public class ExerciseSetServiceImpl implements ExerciseSetService {
 	}
 	
 	@Override
-	public ExerciseSet addSet(ExerciseSet set) {
+	public ExerciseSet create(ExerciseSet set) {
 		return exerciseRepo.saveAndFlush(set);
 	}
 	

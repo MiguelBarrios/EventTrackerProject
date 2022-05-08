@@ -35,9 +35,9 @@ public class ExerciesController {
 		return service.findByExerciseName(name);
 	}
 	
-	@PostMapping("exerciseset/addset")
+	@PostMapping("exerciseset")
 	public ExerciseSet addSet(@RequestBody ExerciseSet exerciseSet) {
-		return service.addSet(exerciseSet);
+		return service.create(exerciseSet);
 	}
 	
 	
