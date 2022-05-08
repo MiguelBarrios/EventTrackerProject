@@ -14,4 +14,6 @@ public interface ExerciseSetService {
 
 	ExerciseSet create(ExerciseSet set);
 
+	ExerciseSet update(ExerciseSet set, int id);
+
 }

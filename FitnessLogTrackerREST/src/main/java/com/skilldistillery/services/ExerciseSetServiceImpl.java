@@ -35,4 +35,16 @@ public class ExerciseSetServiceImpl implements ExerciseSetService {
 		return exerciseRepo.saveAndFlush(set);
 	}
 	
+	@Override
+	public ExerciseSet update(ExerciseSet set, int id) {
+		ExerciseSet managed = this.findById(id);
+		managed.setDatetime(set.getDatetime());
+		managed.setExerciseName(set.getExerciseName());
+		managed.setReps(set.getReps());
+		managed.setType(set.getType());
+		managed.setWeight(set.getWeight());
+		exerciseRepo.saveAndFlush(managed);
+		return managed;
+	}
+	
 }
