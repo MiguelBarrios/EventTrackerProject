@@ -51,9 +51,9 @@ function createTable(tableData) {
 		let tableRow = document.createElement('tr');
 
 		createAndAppendElement('td', item.exerciseName, tableRow);
+		createAndAppendElement('td', item.weight, tableRow);
 		createAndAppendElement('td', item.reps, tableRow);
 		createAndAppendElement('td', item.type, tableRow);
-		createAndAppendElement('td', item.weight, tableRow);
 		createAndAppendElement('td', item.datetime, tableRow);
 
 		tableBodyContainer.appendChild(tableRow);
@@ -84,7 +84,7 @@ function createNewEvent(event){
     reps: reps,
     type: type,
     datetime: dateStr
-	}
+	};
 
 	let xhr = new XMLHttpRequest();
 	xhr.open('POST', 'api/exerciseset', true);
@@ -105,7 +105,7 @@ function createNewEvent(event){
 	}
 
 	let eventJson = JSON.stringify(newEvent); // Convert JS object to JSON string
-
+	console.log(eventJson);
 	// Pass JSON as request body
 	xhr.send(eventJson);
 
@@ -121,7 +121,7 @@ function formatDate(date){
 	let minutes = numberStr(date.getMinutes());
 	let seconds = numberStr(date.getSeconds());
 	let dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
-	console.log(dateStr);
+	return dateStr;
 }
 
 function numberStr(number){
