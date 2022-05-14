@@ -3,6 +3,7 @@ window.addEventListener('load', function() {
 
 	document.addEventForm.addEventBtn.addEventListener('click',createNewEvent);
 	document.getElementById("deleteEvent").addEventListener('click', deleteEvent);
+	document.getElementById("updateEvent").addEventListener('click', updateEvent);
 
 	$('.closeModalBtn').on('click', function(element_id){
 		$('#addItemModal').modal('hide')
@@ -195,48 +196,54 @@ function deleteEvent(event){
 	xhr.send();
 }
 
-// function updateEvent(){
-// 	let id = document.updateEventForm.eventId.value;
-// 	let name = document.updateEventForm.exerciseName.value;
-// 	let weight = document.updateEventForm.weight.value;
-// 	let reps = document.updateEventForm.reps.value;
-// 	let type = document.updateEventForm.type.value;
-// 	let date = document.updateEventForm.currentDate.value;
-// 	let time = document.updateEventForm.currentTime.value;
-// 	let dateTime = date + " " + time;
-// 	console.log(id);
-// 	console.log(name);
-// 	console.log(weight);
-// 	console.log(reps);
-// 	console.log(type);
-// 	console.log(date);
-// 	console.log(time);
+function updateEvent(){
+	let id = document.updateEventForm.eventId.value;
+	let name = document.updateEventForm.exerciseName.value;
+	let weight = document.updateEventForm.weight.value;
+	let reps = document.updateEventForm.reps.value;
+	let type = document.updateEventForm.type.value;
+	let date = document.updateEventForm.currentDate.value;
+	let time = document.updateEventForm.currentTime.value;
+	let dateTime = date + " " + time + ":00";
+	let newEvent = {
+    exerciseName : name,
+    weight: weight,
+    reps: reps,
+    type: type,
+    datetime: dateTime
+	};
 
-// 	let newEvent = {
-//     exerciseName : name,
-//     weight: weight,
-//     reps: reps,
-//     type: type,
-//     datetime: dateTime
-// 	};
+	let xhr = new XMLHttpRequest();
+	xhr.open('PUT', 'api/exerciseset/' + id, true);
+	xhr.setRequestHeader("Content-type", "application/json"); // Specify JSON request body
 
-// 	let xhr = new XMLHttpRequest();
-// 	xhr.open('PUT', 'api/exerciseset/' + id, true);
-// 	xhr.setRequestHeader("Content-type", "application/json"); // Specify JSON request body
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4) {
+			if (xhr.status == 200 || xhr.status == 201) { // Ok or Created
+				let item = JSON.parse(xhr.responseText);
+				updateEventContainer(item);
+			}
+			else {
+				console.error("POST request failed.");
+				console.error(xhr.status + ': ' + xhr.responseText);
+			}
+		}
+	}
 
-// 	xhr.onreadystatechange = function() {
-// 		if (xhr.readyState === 4) {
-// 			if (xhr.status == 200 || xhr.status == 201) { // Ok or Created
-// 				let item = JSON.parse(xhr.responseText);
-// 			}
-// 			else {
-// 				console.error("POST request failed.");
-// 				console.error(xhr.status + ': ' + xhr.responseText);
-// 			}
-// 		}
-// 	}
+	xhr.send(JSON.stringify(newEvent));
 
-// 	xhr.send(JSON.stringify(newEvent));
+}
 
-// }
+function updateEventContainer(item){
 
+	var rowId = "eventid-" + item.id;
+	var tds = document.getElementById(rowId).children;
+	tds[0].textContent = item.exerciseName;
+	tds[1].textContent = item.weight;
+	tds[2].textContent = item.reps;
+	tds[3].textContent = item.type;
+	tds[4].textContent = item.datetime;
+
+	$('#addItemModal').modal('hide')
+
+}
