@@ -2,9 +2,7 @@ window.addEventListener('load', function() {
 	init();
 
 	document.addEventForm.addEventBtn.addEventListener('click',createNewEvent);
-	document.getElementById("deleteEvent").addEventListener('click', function(){
-		console.log("delete event btn pressed");
-	});
+	document.getElementById("deleteEvent").addEventListener('click', deleteEvent);
 
 	$('.closeModalBtn').on('click', function(element_id){
 		$('#addItemModal').modal('hide')
@@ -29,8 +27,6 @@ function addItemToTable(item){
 
 	tableRow.addEventListener('click', settingsEvent)
 	tableBodyContainer.prepend(tableRow);
-
-
 }
 
 
@@ -58,6 +54,7 @@ function createTable(tableData) {
 	let tableHeaderContainer = document.getElementById('tableHeaders');
 	let tableBodyContainer = document.getElementById('tableBody');
 
+
 	let headers = ['Exercise Name', 'Weight', 'Num Reps', 'Type', 'Date'];
 	let headerRow = document.createElement('tr');
 	for (let i = 0; i < headers.length; ++i) {
@@ -69,7 +66,6 @@ function createTable(tableData) {
 
 	tableHeaderContainer.appendChild(headerRow);
 
-	// Create Table Body
 	for (let i = tableData.length - 1; i >= 0; --i) {
 
 		let item = tableData[i];
@@ -82,10 +78,9 @@ function createTable(tableData) {
 		createAndAppendElement('td', item.type, tableRow);
 		createAndAppendElement('td', item.datetime, tableRow);
 
-		tableRow.addEventListener('click', updateEvent)
+		tableRow.addEventListener('click', loadEventModal)
 		tableBodyContainer.appendChild(tableRow);
 	}
-
 }
 
 function createAndAppendElement(tag, content, parent) {
@@ -150,7 +145,7 @@ function numberStr(number){
 	return (number <= 9) ?  "0" + number : number;
 }
 
-function updateEvent(event){
+function loadEventModal(event){
 	var target = event.target.parentElement;
 	let id = target.id.split("-")[1];
 	let children = target.children;
@@ -159,11 +154,7 @@ function updateEvent(event){
 	let reps = children[2].textContent;
 	let type = children[3].textContent;
 	let datetime = children[4].textContent;
-	console.log(name);
-	console.log(weight);
-	console.log(reps);
-	console.log(type);
-	console.log(datetime);
+
 	document.updateEventForm.exerciseName.value = name;
 	document.updateEventForm.weight.value = weight;
 	document.updateEventForm.reps.value = reps;
@@ -173,8 +164,79 @@ function updateEvent(event){
 	let time = datetime.split(" ")[1];
 	document.updateEventForm.currentDate.value = date;
 	document.updateEventForm.currentTime.value = time;
+	document.updateEventForm.eventId.value = id;
 
 
 	$("#addItemModal").modal("show");
 }
+
+function deleteEvent(event){
+	let id = document.updateEventForm.eventId.value;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open('DELETE', 'api/exerciseset/' + id, true);
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4) {
+			if (xhr.status == 200 || xhr.status == 201) { // Ok or Created
+				console.log("item deleted succesfully");
+				var divid = "eventid-" + id;
+				// Delete element by id
+				var elem = document.getElementById(divid);
+				elem.parentNode.removeChild(elem);
+			}
+			else {
+				console.error("DELETE request failed.");
+				console.error(xhr.status + ': ' + xhr.responseText);
+			}
+		}
+	}
+
+	xhr.send();
+}
+
+// function updateEvent(){
+// 	let id = document.updateEventForm.eventId.value;
+// 	let name = document.updateEventForm.exerciseName.value;
+// 	let weight = document.updateEventForm.weight.value;
+// 	let reps = document.updateEventForm.reps.value;
+// 	let type = document.updateEventForm.type.value;
+// 	let date = document.updateEventForm.currentDate.value;
+// 	let time = document.updateEventForm.currentTime.value;
+// 	let dateTime = date + " " + time;
+// 	console.log(id);
+// 	console.log(name);
+// 	console.log(weight);
+// 	console.log(reps);
+// 	console.log(type);
+// 	console.log(date);
+// 	console.log(time);
+
+// 	let newEvent = {
+//     exerciseName : name,
+//     weight: weight,
+//     reps: reps,
+//     type: type,
+//     datetime: dateTime
+// 	};
+
+// 	let xhr = new XMLHttpRequest();
+// 	xhr.open('PUT', 'api/exerciseset/' + id, true);
+// 	xhr.setRequestHeader("Content-type", "application/json"); // Specify JSON request body
+
+// 	xhr.onreadystatechange = function() {
+// 		if (xhr.readyState === 4) {
+// 			if (xhr.status == 200 || xhr.status == 201) { // Ok or Created
+// 				let item = JSON.parse(xhr.responseText);
+// 			}
+// 			else {
+// 				console.error("POST request failed.");
+// 				console.error(xhr.status + ': ' + xhr.responseText);
+// 			}
+// 		}
+// 	}
+
+// 	xhr.send(JSON.stringify(newEvent));
+
+// }
 
