@@ -26,7 +26,7 @@ function addItemToTable(item){
 	createAndAppendElement('td', item.type, tableRow);
 	createAndAppendElement('td', item.datetime, tableRow);
 
-	tableRow.addEventListener('click', settingsEvent)
+	tableRow.addEventListener('click', loadEventModal);
 	tableBodyContainer.prepend(tableRow);
 }
 
@@ -38,7 +38,6 @@ function loadEventsTable() {
 		if (xhr.readyState === 4) {
 			if (xhr.status === 200) {
 				let data = JSON.parse(xhr.responseText);
-				console.log(data);
 				createTable(data);
 			}
 			else {
@@ -117,7 +116,6 @@ function createNewEvent(event){
 		if (xhr.readyState === 4) {
 			if (xhr.status == 200 || xhr.status == 201) { // Ok or Created
 				let item = JSON.parse(xhr.responseText);
-				console.log(item);
 				addItemToTable(item);
 
 			}
@@ -204,7 +202,10 @@ function updateEvent(){
 	let type = document.updateEventForm.type.value;
 	let date = document.updateEventForm.currentDate.value;
 	let time = document.updateEventForm.currentTime.value;
-	let dateTime = date + " " + time + ":00";
+	if(time.length == 5){
+		time += ":00";
+	}
+	let dateTime = date + " " + time;
 	let newEvent = {
     exerciseName : name,
     weight: weight,
@@ -212,6 +213,8 @@ function updateEvent(){
     type: type,
     datetime: dateTime
 	};
+	console.log("***");
+	console.log(newEvent);
 
 	let xhr = new XMLHttpRequest();
 	xhr.open('PUT', 'api/exerciseset/' + id, true);
