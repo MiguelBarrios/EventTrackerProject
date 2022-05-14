@@ -1,0 +1,8 @@
+.hidden {
+  display: none;
+}
+
+#page-container {
+  margin-left: 2%;
+  margin-right: 2%;
+}
