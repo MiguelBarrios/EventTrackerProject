@@ -339,19 +339,36 @@ function renderTotalVolumeGraph(volumeData) {
 
 function renderExerciseProgressChart(workoutData){
 
+	let selectedEx = document.chooseExForm.exerciseSelection.value;
+
+	let filtered = workoutData.filter(function(element){
+		return element[2] == selectedEx;
+	});
+
+	for(let i = 0; i < filtered.length; ++i){
+		filtered[i].pop();
+	}
+
+	filtered.unshift(['Date', 'Volume'])
+	console.log(filtered);
+
+
+
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
-		var data = google.visualization.arrayToDataTable([
-			['Date', 'Volume'],
-			['2004',  1000],
-			['2005',  1170],
-			['2006',  660],
-			['2007',  1030]
-		]);
+		// var data = google.visualization.arrayToDataTable([
+		// 	['Date', 'Volume'],
+		// 	['2004',  1000],
+		// 	['2005',  1170],
+		// 	['2006',  660],
+		// 	['2007',  1030]
+		// ]);
+
+		var data = google.visualization.arrayToDataTable(filtered);
 
 		var options = {
-			title: 'Exercise Volume Per Workout',
+			title: 'Volume Per Workout: ' + selectedEx,
 			curveType: 'function',
 			legend: { position: 'bottom' }
 		};
