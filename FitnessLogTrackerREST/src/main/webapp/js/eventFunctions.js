@@ -276,16 +276,6 @@ function loadStatistics(){
 
 function buildStatisticsContainer(data){
 
-	// let names = data["distinctExercies"];
-	// //build exercize selection
-	// let selectionBar = document.chooseExForm.exerciseSelection;
-	// for(let i = 0; i < names.length; ++i){
-	// 	let cur = names[i];
-	// 	let option = document.createElement('option');
-	// 	option.value = cur;
-	// 	option.textContent = cur;
-	// 	selectionBar.append(option);
-	// }
 
 	let containerMain = document.getElementById('statsInfoContainer');
 
@@ -352,11 +342,11 @@ function renderExerciseProgressChart(workoutData){
 			return item;
 		})
 
-		renderVolumeChar(name, filtered);
+		renderVolumeCharts(name, filtered);
 	}
 }
 
-function renderVolumeChar(name, filtered) {
+function renderVolumeCharts(name, filtered) {
 
 	filtered.unshift(['Date', 'Volume'])
 	console.log(name);

@@ -29,6 +29,10 @@
   flex: 0 0 70%;
 }
 
+#statisticsContainer {
+  margin-top: 2%;
+}
+
 #statistics {
   display: flex;
   flex-direction: row;
