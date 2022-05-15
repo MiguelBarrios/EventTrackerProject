@@ -1,11 +1,11 @@
 window.addEventListener('load', function() {
 	init();
 
-	document.addEventForm.addEventBtn.addEventListener('click',createNewEvent);
+	document.addEventForm.addEventBtn.addEventListener('click', createNewEvent);
 	document.getElementById("deleteEvent").addEventListener('click', deleteEvent);
 	document.getElementById("updateEvent").addEventListener('click', updateEvent);
 
-	$('.closeModalBtn').on('click', function(element_id){
+	$('.closeModalBtn').on('click', function(element_id) {
 		$('#addItemModal').modal('hide')
 	});
 });
@@ -15,7 +15,7 @@ function init() {
 	loadStatistics();
 }
 
-function addItemToTable(item){
+function addItemToTable(item) {
 	let tableBodyContainer = document.getElementById('tableBody');
 
 	let tableRow = document.createElement('tr');
@@ -40,8 +40,7 @@ function loadEventsTable() {
 			if (xhr.status === 200) {
 				let data = JSON.parse(xhr.responseText);
 				createTable(data);
-			}
-			else {
+			} else {
 				console.log('Unable to load event table');
 			}
 		}
@@ -90,7 +89,7 @@ function createAndAppendElement(tag, content, parent) {
 	parent.appendChild(item);
 }
 
-function createNewEvent(event){
+function createNewEvent(event) {
 	event.preventDefault();
 
 	let form = document.addEventForm;
@@ -102,11 +101,11 @@ function createNewEvent(event){
 	let dateTime = new Date();
 	let dateStr = formatDate(dateTime);
 	let newEvent = {
-    exerciseName : name,
-    weight: weight,
-    reps: reps,
-    type: type,
-    datetime: dateStr
+		exerciseName: name,
+		weight: weight,
+		reps: reps,
+		type: type,
+		datetime: dateStr
 	};
 
 	let xhr = new XMLHttpRequest();
@@ -120,8 +119,7 @@ function createNewEvent(event){
 				addItemToTable(item);
 				loadStatistics();
 
-			}
-			else {
+			} else {
 				console.error("POST request failed.");
 				console.error(xhr.status + ': ' + xhr.responseText);
 			}
@@ -132,7 +130,7 @@ function createNewEvent(event){
 }
 
 //yyyy-mm-dd hh-mm-ss
-function formatDate(date){
+function formatDate(date) {
 	let year = date.getFullYear();
 	let month = numberStr(date.getMonth());
 	let day = numberStr(date.getDate());
@@ -142,11 +140,11 @@ function formatDate(date){
 	return year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 }
 
-function numberStr(number){
-	return (number <= 9) ?  "0" + number : number;
+function numberStr(number) {
+	return (number <= 9) ? "0" + number : number;
 }
 
-function loadEventModal(event){
+function loadEventModal(event) {
 	var target = event.target.parentElement;
 	let id = target.id.split("-")[1];
 	let children = target.children;
@@ -171,7 +169,7 @@ function loadEventModal(event){
 	$("#addItemModal").modal("show");
 }
 
-function deleteEvent(event){
+function deleteEvent(event) {
 	let id = document.updateEventForm.eventId.value;
 
 	let xhr = new XMLHttpRequest();
@@ -187,8 +185,7 @@ function deleteEvent(event){
 				elem.parentNode.removeChild(elem);
 				$('#addItemModal').modal('hide');
 				loadStatistics();
-			}
-			else {
+			} else {
 				console.error("DELETE request failed.");
 				console.error(xhr.status + ': ' + xhr.responseText);
 			}
@@ -198,7 +195,7 @@ function deleteEvent(event){
 	xhr.send();
 }
 
-function updateEvent(){
+function updateEvent() {
 	let id = document.updateEventForm.eventId.value;
 	let name = document.updateEventForm.exerciseName.value;
 	let weight = document.updateEventForm.weight.value;
@@ -206,16 +203,16 @@ function updateEvent(){
 	let type = document.updateEventForm.type.value;
 	let date = document.updateEventForm.currentDate.value;
 	let time = document.updateEventForm.currentTime.value;
-	if(time.length == 5){
+	if (time.length == 5) {
 		time += ":00";
 	}
 	let dateTime = date + " " + time;
 	let newEvent = {
-    exerciseName : name,
-    weight: weight,
-    reps: reps,
-    type: type,
-    datetime: dateTime
+		exerciseName: name,
+		weight: weight,
+		reps: reps,
+		type: type,
+		datetime: dateTime
 	};
 	console.log("***");
 	console.log(newEvent);
@@ -230,8 +227,7 @@ function updateEvent(){
 				let item = JSON.parse(xhr.responseText);
 				updateEventContainer(item);
 				loadStatistics();
-			}
-			else {
+			} else {
 				console.error("POST request failed.");
 				console.error(xhr.status + ': ' + xhr.responseText);
 			}
@@ -242,7 +238,7 @@ function updateEvent(){
 
 }
 
-function updateEventContainer(item){
+function updateEventContainer(item) {
 
 	var rowId = "eventid-" + item.id;
 	var tds = document.getElementById(rowId).children;
@@ -256,7 +252,7 @@ function updateEventContainer(item){
 
 }
 
-function loadStatistics(){
+function loadStatistics() {
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', 'api/exerciseset/stats');
 	xhr.onreadystatechange = function() {
@@ -264,8 +260,8 @@ function loadStatistics(){
 			if (xhr.status === 200) {
 				let data = JSON.parse(xhr.responseText);
 				buildStatisticsContainer(data);
-			}
-			else {
+				renderExerciseProgressChart(data["totalVolumePerExerciesPerDay"]);
+			} else {
 				console.log('Unable to load event table');
 			}
 		}
@@ -273,8 +269,19 @@ function loadStatistics(){
 	xhr.send();
 }
 
-function buildStatisticsContainer(data){
-	console.log(data);
+function buildStatisticsContainer(data) {
+
+	let names = data["distinctExercies"];
+	//build exercize selection
+	let selectionBar = document.chooseExForm.exerciseSelection;
+	for(let i = 0; i < names.length; ++i){
+		let cur = names[i];
+		let option = document.createElement('option');
+		option.value = cur;
+		option.textContent = cur;
+		selectionBar.append(option);
+	}
+
 	let containerMain = document.getElementById('statsInfoContainer');
 
 	document.getElementById('totalVolume').textContent = "Total Volume: " + data["totalVolume"];
@@ -284,46 +291,74 @@ function buildStatisticsContainer(data){
 
 	let totalVolumePerExerciesPerDay = data["totalVolumePerExerciesPerDay"];
 	let totalVolumePerExercise = data["totalVolumePerExercise"];
-	console.log(totalVolumePerExerciesPerDay);
 	renderTotalVolumeGraph(totalVolumePerExercise);
 
 	document.getElementById('statistics').classList.remove('hidden');
 }
 
-function createElement(tag, content){
+function createElement(tag, content) {
 	let item = document.createElement(tag);
 	item.textContent = content;
 	return item;
 }
 
-function renderTotalVolumeGraph(volumeData){
-				document.getElementById('chart_div').innerHTML = '';
+function renderTotalVolumeGraph(volumeData) {
+	document.getElementById('chart_div').innerHTML = '';
 
-	      // Load the Visualization API and the corechart package.
-				google.charts.load('current', {'packages':['corechart']});
+	// Load the Visualization API and the corechart package.
+	google.charts.load('current', {
+		'packages': ['corechart']
+	});
 
-				// Set a callback to run when the Google Visualization API is loaded.
-				google.charts.setOnLoadCallback(drawChart);
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.charts.setOnLoadCallback(drawChart);
 
-				// Callback that creates and populates a data table,
-				// instantiates the pie chart, passes in the data and
-				// draws it.
-				function drawChart() {
+	// Callback that creates and populates a data table,
+	// instantiates the pie chart, passes in the data and
+	// draws it.
+	function drawChart() {
 
-					// Create the data table.
-					var data = new google.visualization.DataTable();
-					data.addColumn('string', 'Exercise Name');
-					data.addColumn('number', 'Volume');
-					data.addRows(volumeData)
+		// Create the data table.
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Exercise Name');
+		data.addColumn('number', 'Volume');
+		data.addRows(volumeData)
 
-					// Set chart options
-					var options = {'title':'Total Volume By exercise',
-												 'width':500,
-												 'height':400};
+		// Set chart options
+		var options = {
+			'title': 'Total Volume By Exercise',
+			'width': 500,
+			'height': 400
+		};
 
-					// Instantiate and draw our chart, passing in some options.
-					var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-					chart.draw(data, options);
-				}
+		// Instantiate and draw our chart, passing in some options.
+		var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+		chart.draw(data, options);
+	}
+}
+
+function renderExerciseProgressChart(workoutData){
+
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable([
+			['Date', 'Volume'],
+			['2004',  1000],
+			['2005',  1170],
+			['2006',  660],
+			['2007',  1030]
+		]);
+
+		var options = {
+			title: 'Exercise Volume Per Workout',
+			curveType: 'function',
+			legend: { position: 'bottom' }
+		};
+
+		var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+		chart.draw(data, options);
+	}
 
 }
