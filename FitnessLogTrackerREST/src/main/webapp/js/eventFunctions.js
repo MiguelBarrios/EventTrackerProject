@@ -12,6 +12,7 @@ window.addEventListener('load', function() {
 
 function init() {
 	loadEventsTable();
+	loadStatistics();
 }
 
 function addItemToTable(item){
@@ -117,6 +118,7 @@ function createNewEvent(event){
 			if (xhr.status == 200 || xhr.status == 201) { // Ok or Created
 				let item = JSON.parse(xhr.responseText);
 				addItemToTable(item);
+				loadStatistics();
 
 			}
 			else {
@@ -183,6 +185,8 @@ function deleteEvent(event){
 				// Delete element by id
 				var elem = document.getElementById(divid);
 				elem.parentNode.removeChild(elem);
+				$('#addItemModal').modal('hide');
+				loadStatistics();
 			}
 			else {
 				console.error("DELETE request failed.");
@@ -225,6 +229,7 @@ function updateEvent(){
 			if (xhr.status == 200 || xhr.status == 201) { // Ok or Created
 				let item = JSON.parse(xhr.responseText);
 				updateEventContainer(item);
+				loadStatistics();
 			}
 			else {
 				console.error("POST request failed.");
@@ -248,5 +253,77 @@ function updateEventContainer(item){
 	tds[4].textContent = item.datetime;
 
 	$('#addItemModal').modal('hide')
+
+}
+
+function loadStatistics(){
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/exerciseset/stats');
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4) {
+			if (xhr.status === 200) {
+				let data = JSON.parse(xhr.responseText);
+				buildStatisticsContainer(data);
+			}
+			else {
+				console.log('Unable to load event table');
+			}
+		}
+	}
+	xhr.send();
+}
+
+function buildStatisticsContainer(data){
+	console.log(data);
+	let containerMain = document.getElementById('statsInfoContainer');
+
+	document.getElementById('totalVolume').textContent = "Total Volume: " + data["totalVolume"];
+	document.getElementById('numActiveDays').textContent = "Days worked out: " + data["daysWorkedOut"];
+	document.getElementById('numEx').textContent = "Total Exercises: " + data["distinctExercies"].length;
+
+
+	let totalVolumePerExerciesPerDay = data["totalVolumePerExerciesPerDay"];
+	let totalVolumePerExercise = data["totalVolumePerExercise"];
+	console.log(totalVolumePerExerciesPerDay);
+	renderTotalVolumeGraph(totalVolumePerExercise);
+
+	document.getElementById('statistics').classList.remove('hidden');
+}
+
+function createElement(tag, content){
+	let item = document.createElement(tag);
+	item.textContent = content;
+	return item;
+}
+
+function renderTotalVolumeGraph(volumeData){
+				document.getElementById('chart_div').innerHTML = '';
+
+	      // Load the Visualization API and the corechart package.
+				google.charts.load('current', {'packages':['corechart']});
+
+				// Set a callback to run when the Google Visualization API is loaded.
+				google.charts.setOnLoadCallback(drawChart);
+
+				// Callback that creates and populates a data table,
+				// instantiates the pie chart, passes in the data and
+				// draws it.
+				function drawChart() {
+
+					// Create the data table.
+					var data = new google.visualization.DataTable();
+					data.addColumn('string', 'Exercise Name');
+					data.addColumn('number', 'Volume');
+					data.addRows(volumeData)
+
+					// Set chart options
+					var options = {'title':'Total Volume By exercise',
+												 'width':500,
+												 'height':400};
+
+					// Instantiate and draw our chart, passing in some options.
+					var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+					chart.draw(data, options);
+				}
 
 }

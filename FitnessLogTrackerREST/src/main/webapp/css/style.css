@@ -1,8 +1,36 @@
+
 .hidden {
   display: none;
 }
 
 #page-container {
-  margin-left: 2%;
-  margin-right: 2%;
+  display: flex;
+  justify-content: center;
+
+}
+#header-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+#addEventContainer {
+  background-color: lightblue;
+  padding: 2%;
+  max-height: 450px;
+  flex: 0 0 30%;
+  margin-left: 5px;
+}
+
+#eventsTableContainer {
+  background-color: lightcoral;
+  max-height: 450px;
+  overflow-x: auto;
+  flex: 0 0 70%;
+}
+
+#statistics {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
