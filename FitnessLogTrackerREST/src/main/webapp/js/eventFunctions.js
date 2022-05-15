@@ -16,7 +16,7 @@ function init() {
 }
 
 function addItemToTable(item){
-	let tableBodyContainer = document.getElementById('tableBody');
+	let tableBody = document.getElementById('tableBody');
 
 	let tableRow = document.createElement('tr');
 	tableRow.id = "eventid-" + item.id;
@@ -28,7 +28,7 @@ function addItemToTable(item){
 	createAndAppendElement('td', item.datetime, tableRow);
 
 	tableRow.addEventListener('click', loadEventModal);
-	tableBodyContainer.prepend(tableRow);
+	tableBody.prepend(tableRow);
 }
 
 
@@ -53,8 +53,7 @@ function loadEventsTable() {
 function createTable(tableData) {
 
 	let tableHeaderContainer = document.getElementById('tableHeaders');
-	let tableBodyContainer = document.getElementById('tableBody');
-
+	let tableBody = document.getElementById('tableBody');
 
 	let headers = ['Exercise Name', 'Weight', 'Num Reps', 'Type', 'Date'];
 	let headerRow = document.createElement('tr');
@@ -68,7 +67,6 @@ function createTable(tableData) {
 	tableHeaderContainer.appendChild(headerRow);
 
 	for (let i = tableData.length - 1; i >= 0; --i) {
-
 		let item = tableData[i];
 		let tableRow = document.createElement('tr');
 		tableRow.id = "eventid-" + item.id;
@@ -80,7 +78,7 @@ function createTable(tableData) {
 		createAndAppendElement('td', item.datetime, tableRow);
 
 		tableRow.addEventListener('click', loadEventModal)
-		tableBodyContainer.appendChild(tableRow);
+		tableBody.appendChild(tableRow);
 	}
 }
 
@@ -94,19 +92,12 @@ function createNewEvent(event){
 	event.preventDefault();
 
 	let form = document.addEventForm;
-
-	let name = form.exerciseName.value;
-	let weight = form.weight.value;
-	let reps = form.reps.value;
-	let type = form.type.value;
-	let dateTime = new Date();
-	let dateStr = formatDate(dateTime);
 	let newEvent = {
-    exerciseName : name,
-    weight: weight,
-    reps: reps,
-    type: type,
-    datetime: dateStr
+    exerciseName : form.exerciseName.value,
+    weight: form.weight.value,
+    reps: form.reps.value,
+    type: form.type.value,
+    datetime: formatDate(new Date())
 	};
 
 	let xhr = new XMLHttpRequest();
