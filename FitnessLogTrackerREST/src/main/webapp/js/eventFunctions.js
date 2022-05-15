@@ -264,6 +264,7 @@ function loadStatistics(){
 			if (xhr.status === 200) {
 				let data = JSON.parse(xhr.responseText);
 				buildStatisticsContainer(data);
+				renderExerciseProgressChart(data);
 			}
 			else {
 				console.log('Unable to load event table');
@@ -274,7 +275,18 @@ function loadStatistics(){
 }
 
 function buildStatisticsContainer(data){
-	console.log(data);
+
+	// let names = data["distinctExercies"];
+	// //build exercize selection
+	// let selectionBar = document.chooseExForm.exerciseSelection;
+	// for(let i = 0; i < names.length; ++i){
+	// 	let cur = names[i];
+	// 	let option = document.createElement('option');
+	// 	option.value = cur;
+	// 	option.textContent = cur;
+	// 	selectionBar.append(option);
+	// }
+
 	let containerMain = document.getElementById('statsInfoContainer');
 
 	document.getElementById('totalVolume').textContent = "Total Volume: " + data["totalVolume"];
@@ -284,7 +296,6 @@ function buildStatisticsContainer(data){
 
 	let totalVolumePerExerciesPerDay = data["totalVolumePerExerciesPerDay"];
 	let totalVolumePerExercise = data["totalVolumePerExercise"];
-	console.log(totalVolumePerExerciesPerDay);
 	renderTotalVolumeGraph(totalVolumePerExercise);
 
 	document.getElementById('statistics').classList.remove('hidden');
@@ -325,5 +336,51 @@ function renderTotalVolumeGraph(volumeData){
 					var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 					chart.draw(data, options);
 				}
-
 }
+
+function renderExerciseProgressChart(workoutData){
+
+	let distinctExercies = workoutData["distinctExercies"];
+	let history = workoutData["totalVolumePerExerciesPerDay"];
+
+	for(let i = 0; i < distinctExercies.length; ++i){
+		let name = distinctExercies[i];
+		let filtered  = history.filter(function(item){
+			return item[2] == name;
+		}).map(function(item){
+			item.pop();
+			return item;
+		})
+
+		renderVolumeChar(name, filtered);
+	}
+}
+
+function renderVolumeChar(name, filtered) {
+
+	filtered.unshift(['Date', 'Volume'])
+	console.log(name);
+	console.log(filtered);
+	google.charts.setOnLoadCallback(drawChart);
+
+	function drawChart() {
+
+			var data = google.visualization.arrayToDataTable(filtered);
+
+			var options = {
+				title: 'Volume Per Workout: ' + name,
+				curveType: 'function',
+				legend: { position: 'bottom' }
+			};
+
+			let progressCharts = document.getElementById("progressCharts");
+			let chartDiv = document.createElement('div');
+			chartDiv.id = "curve_chart_" + name.replace(" ", "_");
+			progressCharts.appendChild(chartDiv);
+			console.log(progressCharts);
+
+			var chart = new google.visualization.LineChart(chartDiv);
+			chart.draw(data, options);
+	}
+}
+
