@@ -1,8 +1,7 @@
 # EventTrackerProject
 
 ## Description
-This project is a REST endpoint for performing CRUD operations on a database
-containing exercise activity information.
+REST endpoint and front end to performing CRUD operations on a database containing workout information
 
 
 
@@ -25,9 +24,16 @@ containing exercise activity information.
 #### Delete event
 `DELETE api/exerciseset/{id}`
 
+### Retrieve statistical info about events
+`GET api/exerciseset/stats`
+
 ## Technologies Used
 - Spring Boot
 - MySQL
 - Spring Data JPA
 - Gradle
 - JUnit
+- Java
+- JavaScript
+- XML HTTP Requests
+- Google Charts
