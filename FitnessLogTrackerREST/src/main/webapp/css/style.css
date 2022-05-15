@@ -34,3 +34,17 @@
   flex-direction: row;
   justify-content: center;
 }
+
+#statisticsHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 25px;
+}
+
+#progressCharts{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
