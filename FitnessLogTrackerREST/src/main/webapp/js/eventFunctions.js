@@ -188,10 +188,7 @@ function deleteEvent(event){
 
 function updateEvent(){
 	let id = document.updateEventForm.eventId.value;
-	let name = document.updateEventForm.exerciseName.value;
-	let weight = document.updateEventForm.weight.value;
-	let reps = document.updateEventForm.reps.value;
-	let type = document.updateEventForm.type.value;
+
 	let date = document.updateEventForm.currentDate.value;
 	let time = document.updateEventForm.currentTime.value;
 	if(time.length == 5){
@@ -199,10 +196,10 @@ function updateEvent(){
 	}
 	let dateTime = date + " " + time;
 	let newEvent = {
-    exerciseName : name,
-    weight: weight,
-    reps: reps,
-    type: type,
+    exerciseName : document.updateEventForm.exerciseName.value,
+    weight: document.updateEventForm.weight.value,
+    reps: document.updateEventForm.reps.value,
+    type: document.updateEventForm.type.value,
     datetime: dateTime
 	};
 
@@ -223,9 +220,7 @@ function updateEvent(){
 			}
 		}
 	}
-
 	xhr.send(JSON.stringify(newEvent));
-
 }
 
 function updateEventContainer(item){
@@ -239,7 +234,6 @@ function updateEventContainer(item){
 	tds[4].textContent = item.datetime;
 
 	$('#addItemModal').modal('hide')
-
 }
 
 function loadStatistics(){
@@ -261,14 +255,11 @@ function loadStatistics(){
 }
 
 function buildStatisticsContainer(data){
-
-
 	let containerMain = document.getElementById('statsInfoContainer');
 
 	document.getElementById('totalVolume').textContent = "Total Volume: " + data["totalVolume"];
 	document.getElementById('numActiveDays').textContent = "Days worked out: " + data["daysWorkedOut"];
 	document.getElementById('numEx').textContent = "Total Exercises: " + data["distinctExercies"].length;
-
 
 	let totalVolumePerExerciesPerDay = data["totalVolumePerExerciesPerDay"];
 	let totalVolumePerExercise = data["totalVolumePerExercise"];
@@ -311,9 +302,6 @@ function renderTotalVolumeGraph(volumeData){
 
 					let totalVolumeChart = document.createElement('div');
 					var chart = new google.visualization.PieChart(totalVolumeChart);
-
-					// Instantiate and draw our chart, passing in some options.
-					// var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 					chart.draw(data, options);
 				}
 }
