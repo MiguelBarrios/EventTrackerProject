@@ -110,7 +110,6 @@ function createNewEvent(event){
 				let item = JSON.parse(xhr.responseText);
 				addItemToTable(item);
 				loadStatistics();
-
 			}
 			else {
 				console.error("POST request failed.");
@@ -157,8 +156,6 @@ function loadEventModal(event){
 	document.updateEventForm.currentDate.value = date;
 	document.updateEventForm.currentTime.value = time;
 	document.updateEventForm.eventId.value = id;
-
-
 	$("#addItemModal").modal("show");
 }
 
@@ -208,8 +205,6 @@ function updateEvent(){
     type: type,
     datetime: dateTime
 	};
-	console.log("***");
-	console.log(newEvent);
 
 	let xhr = new XMLHttpRequest();
 	xhr.open('PUT', 'api/exerciseset/' + id, true);
@@ -289,7 +284,8 @@ function createElement(tag, content){
 }
 
 function renderTotalVolumeGraph(volumeData){
-				document.getElementById('chart_div').innerHTML = '';
+				var progressCharts = document.getElementById('progressCharts');
+				progressCharts.innerHTML = '';
 
 	      // Load the Visualization API and the corechart package.
 				google.charts.load('current', {'packages':['corechart']});
@@ -313,8 +309,11 @@ function renderTotalVolumeGraph(volumeData){
 												 'width':500,
 												 'height':400};
 
+					let totalVolumeChart = document.createElement('div');
+					var chart = new google.visualization.PieChart(totalVolumeChart);
+
 					// Instantiate and draw our chart, passing in some options.
-					var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+					// var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 					chart.draw(data, options);
 				}
 }
@@ -340,8 +339,6 @@ function renderExerciseProgressChart(workoutData){
 function renderVolumeCharts(name, filtered) {
 
 	filtered.unshift(['Date', 'Volume'])
-	console.log(name);
-	console.log(filtered);
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
@@ -358,8 +355,6 @@ function renderVolumeCharts(name, filtered) {
 			let chartDiv = document.createElement('div');
 			chartDiv.id = "curve_chart_" + name.replace(" ", "_");
 			progressCharts.appendChild(chartDiv);
-			console.log(progressCharts);
-
 			var chart = new google.visualization.LineChart(chartDiv);
 			chart.draw(data, options);
 	}
