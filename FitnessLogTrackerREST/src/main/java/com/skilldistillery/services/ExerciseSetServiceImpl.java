@@ -1,6 +1,9 @@
 package com.skilldistillery.services;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +60,37 @@ public class ExerciseSetServiceImpl implements ExerciseSetService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Map<String, Object> getStats() {
+		int totalVolume = exerciseRepo.getTotalVolume();
+		List<String> names = exerciseRepo.getDistinctExercise();
+		List<Object[]> totalVolumePerExercise = exerciseRepo.getTotalVolumePerExercie();
+		
+		List<Object[]> volumePerExercisePerDay = exerciseRepo.getTotalVolumePerExercisePerDay();
+		int daysWorkedOut = exerciseRepo.getNumberOfDaysWorkedOut();
+		
+		System.out.println(totalVolume);
+		System.out.println(names);
+		for(Object[] arr : totalVolumePerExercise) {
+			System.out.println(Arrays.toString(arr));
+		}
+		
+		System.out.println("****");
+		for(Object[] arr: volumePerExercisePerDay) {
+			System.out.println(Arrays.toString(arr));
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("totalVolumePerExerciesPerDay", volumePerExercisePerDay);
+		map.put("totalVolumePerExercise", totalVolumePerExercise);
+		map.put("distinctExercies", names);
+		map.put("totalVolume", totalVolume);
+		
+		map.put("daysWorkedOut", daysWorkedOut);
+		
+		return map;
 	}
 	
 }

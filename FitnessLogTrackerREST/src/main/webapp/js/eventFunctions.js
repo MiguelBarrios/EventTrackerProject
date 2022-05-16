@@ -31,7 +31,6 @@ function addItemToTable(item){
 	tableBody.prepend(tableRow);
 }
 
-
 function loadEventsTable() {
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', 'api/exerciseset');
@@ -49,12 +48,10 @@ function loadEventsTable() {
 	xhr.send();
 }
 
-
 function createTable(tableData) {
 
 	let tableHeaderContainer = document.getElementById('tableHeaders');
 	let tableBody = document.getElementById('tableBody');
-
 	let headers = ['Exercise Name', 'Weight', 'Num Reps', 'Type', 'Date'];
 	let headerRow = document.createElement('tr');
 	for (let i = 0; i < headers.length; ++i) {

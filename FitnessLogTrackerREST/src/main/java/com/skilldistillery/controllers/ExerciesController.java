@@ -1,6 +1,7 @@
 package com.skilldistillery.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,6 +81,11 @@ public class ExerciesController {
 		}else {
 			res.setStatus(404);
 		}
+	}
+	
+	@GetMapping("exerciseset/stats")
+	public Map<String, Object> getStats() {
+		return service.getStats();
 	}
 	
 	

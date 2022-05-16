@@ -1,6 +1,7 @@
 package com.skilldistillery.services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.skilldistillery.entities.ExerciseSet;
 
@@ -17,5 +18,7 @@ public interface ExerciseSetService {
 	ExerciseSet update(ExerciseSet set, int id);
 
 	boolean delete(int id);
+
+	Map<String, Object> getStats();
 
 }
