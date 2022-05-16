@@ -313,11 +313,12 @@ function renderExerciseProgressChart(workoutData){
 
 	for(let i = 0; i < distinctExercies.length; ++i){
 		let name = distinctExercies[i];
+
 		let filtered  = history.filter(function(item){
 			return item[2] == name;
 		}).map(function(item){
 			item.pop();
-			return item;
+			return item;;
 		})
 
 		renderVolumeCharts(name, filtered);
