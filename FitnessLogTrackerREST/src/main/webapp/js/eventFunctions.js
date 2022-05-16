@@ -110,7 +110,6 @@ function createNewEvent(event){
 				let item = JSON.parse(xhr.responseText);
 				addItemToTable(item);
 				loadStatistics();
-
 			}
 			else {
 				console.error("POST request failed.");
@@ -157,8 +156,6 @@ function loadEventModal(event){
 	document.updateEventForm.currentDate.value = date;
 	document.updateEventForm.currentTime.value = time;
 	document.updateEventForm.eventId.value = id;
-
-
 	$("#addItemModal").modal("show");
 }
 
@@ -191,10 +188,7 @@ function deleteEvent(event){
 
 function updateEvent(){
 	let id = document.updateEventForm.eventId.value;
-	let name = document.updateEventForm.exerciseName.value;
-	let weight = document.updateEventForm.weight.value;
-	let reps = document.updateEventForm.reps.value;
-	let type = document.updateEventForm.type.value;
+
 	let date = document.updateEventForm.currentDate.value;
 	let time = document.updateEventForm.currentTime.value;
 	if(time.length == 5){
@@ -202,14 +196,12 @@ function updateEvent(){
 	}
 	let dateTime = date + " " + time;
 	let newEvent = {
-    exerciseName : name,
-    weight: weight,
-    reps: reps,
-    type: type,
+    exerciseName : document.updateEventForm.exerciseName.value,
+    weight: document.updateEventForm.weight.value,
+    reps: document.updateEventForm.reps.value,
+    type: document.updateEventForm.type.value,
     datetime: dateTime
 	};
-	console.log("***");
-	console.log(newEvent);
 
 	let xhr = new XMLHttpRequest();
 	xhr.open('PUT', 'api/exerciseset/' + id, true);
@@ -228,9 +220,7 @@ function updateEvent(){
 			}
 		}
 	}
-
 	xhr.send(JSON.stringify(newEvent));
-
 }
 
 function updateEventContainer(item){
@@ -244,7 +234,6 @@ function updateEventContainer(item){
 	tds[4].textContent = item.datetime;
 
 	$('#addItemModal').modal('hide')
-
 }
 
 function loadStatistics(){
@@ -266,14 +255,11 @@ function loadStatistics(){
 }
 
 function buildStatisticsContainer(data){
-
-
 	let containerMain = document.getElementById('statsInfoContainer');
 
 	document.getElementById('totalVolume').textContent = "Total Volume: " + data["totalVolume"];
 	document.getElementById('numActiveDays').textContent = "Days worked out: " + data["daysWorkedOut"];
 	document.getElementById('numEx').textContent = "Total Exercises: " + data["distinctExercies"].length;
-
 
 	let totalVolumePerExerciesPerDay = data["totalVolumePerExerciesPerDay"];
 	let totalVolumePerExercise = data["totalVolumePerExercise"];
@@ -289,7 +275,8 @@ function createElement(tag, content){
 }
 
 function renderTotalVolumeGraph(volumeData){
-				document.getElementById('chart_div').innerHTML = '';
+				var progressCharts = document.getElementById('progressCharts');
+				progressCharts.innerHTML = '';
 
 	      // Load the Visualization API and the corechart package.
 				google.charts.load('current', {'packages':['corechart']});
@@ -313,8 +300,8 @@ function renderTotalVolumeGraph(volumeData){
 												 'width':500,
 												 'height':400};
 
-					// Instantiate and draw our chart, passing in some options.
-					var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+					let totalVolumeChart = document.createElement('div');
+					var chart = new google.visualization.PieChart(totalVolumeChart);
 					chart.draw(data, options);
 				}
 }
@@ -326,11 +313,12 @@ function renderExerciseProgressChart(workoutData){
 
 	for(let i = 0; i < distinctExercies.length; ++i){
 		let name = distinctExercies[i];
+
 		let filtered  = history.filter(function(item){
 			return item[2] == name;
 		}).map(function(item){
 			item.pop();
-			return item;
+			return item;;
 		})
 
 		renderVolumeCharts(name, filtered);
@@ -340,8 +328,6 @@ function renderExerciseProgressChart(workoutData){
 function renderVolumeCharts(name, filtered) {
 
 	filtered.unshift(['Date', 'Volume'])
-	console.log(name);
-	console.log(filtered);
 	google.charts.setOnLoadCallback(drawChart);
 
 	function drawChart() {
@@ -358,8 +344,6 @@ function renderVolumeCharts(name, filtered) {
 			let chartDiv = document.createElement('div');
 			chartDiv.id = "curve_chart_" + name.replace(" ", "_");
 			progressCharts.appendChild(chartDiv);
-			console.log(progressCharts);
-
 			var chart = new google.visualization.LineChart(chartDiv);
 			chart.draw(data, options);
 	}
