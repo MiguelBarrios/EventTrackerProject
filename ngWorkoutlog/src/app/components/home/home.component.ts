@@ -14,7 +14,12 @@ export class HomeComponent implements OnInit {
 
   closeResult = '';
   newItem: Exerciseset = new Exerciseset();
+
   selectedItem: Exerciseset = new Exerciseset();
+  selectedItemDate:string | null = null;
+  selectedItemTime:string | null = null;
+
+
   items:Exerciseset[] = [];
 
   constructor(private workoutService:WorkoutService, private modalService: NgbModal,
@@ -45,6 +50,9 @@ export class HomeComponent implements OnInit {
   loadSelected(item:Exerciseset){
     this.selectedItem = item;
     console.log(this.selectedItem);
+    this.selectedItemDate = this.date.transform(this.selectedItem.datetime,"YYYY-MM-dd");
+    this.selectedItemTime = this.date.transform(this.selectedItem.datetime,"hh:mm:ss");
+
   }
 
   index(){
@@ -76,8 +84,18 @@ export class HomeComponent implements OnInit {
   }
 
   update(item: Exerciseset){
+    item.datetime = this.selectedItemDate + " " + this.selectedItemTime;
     console.log("Updating item: ")
     console.log(item);
+    this.workoutService.update(item).subscribe(
+      (data) => {
+        console.log("sucessfully deleted item")
+        this.index();
+      },
+      (error) => {
+        console.log("Error in observable update()")
+      }
+    )
   }
 
   delete(item: Exerciseset){
@@ -91,7 +109,4 @@ export class HomeComponent implements OnInit {
       }
     )
   }
-
-
-
 }

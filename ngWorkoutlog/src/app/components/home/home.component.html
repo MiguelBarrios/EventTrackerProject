@@ -41,11 +41,11 @@
 
 <ng-template #updateItem let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+        <h4 class="modal-title" id="modal-basic-title">Update Set</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-        <form>
+        <form name="updateEvent">
             <div class="mb-3">
                 <label for="exerciseName">Name</label>
                 <div class="input-group">
@@ -60,8 +60,8 @@
                     <input class="form-control" name="reps" [(ngModel)]="selectedItem.reps">
                 </div>
                 <label>Date Time</label>
-                <input type="date" name="currentDate">
-                <input type="time" name="currentTime">
+                <input type="date" name="currentDate" [(ngModel)]="selectedItemDate">
+                <input type="time" name="currentTime" [(ngModel)]="selectedItemTime">
             </div>
         </form>
     </div>

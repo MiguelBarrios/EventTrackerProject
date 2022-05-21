@@ -33,6 +33,16 @@ export class WorkoutService {
       )
   }
 
+  update(item:Exerciseset){
+    return this.http.put<Exerciseset>(this.url + "/" + item.id, item)
+      .pipe(
+        catchError((err: any) => {
+          console.log(err);
+          return throwError('Error in WorkoutService.update()');
+        })
+      )
+  }
+
   delete(id:number){
     return this.http.delete<void>(this.url + "/" + id)
       .pipe(
