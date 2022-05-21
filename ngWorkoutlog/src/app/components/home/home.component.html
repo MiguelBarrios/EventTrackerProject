@@ -6,14 +6,14 @@
 <form name="addEventForm">
     <div class="form-group">
         <label>Exercise Name</label>
-        <input type="text" name="exerciseName" class="form-control" placeholder="Exercise Name">
+        <input type="text" name="exerciseName" class="form-control" placeholder="Exercise Name" [(ngModel)]="newItem.exerciseName">
         <label>Weight</label>
-        <input type="number" name="weight" class="form-control" step="0.5">
+        <input type="number" name="weight" class="form-control" step="0.5" placeholder="" [(ngModel)]="newItem.weight">
         <label>Reps</label>
-        <input type="number" name="reps" class="form-control" step="1">
+        <input type="number" name="reps" class="form-control" step="1" [(ngModel)]="newItem.reps">
         <label>Type</label>
-        <input type="text" name="type" class="form-control" placeholder="Type">
-        <button class="btn btn-secondary" name="addEventBtn">Add</button>
+        <input type="text" name="type" class="form-control" placeholder="Type" [(ngModel)]="newItem.type">
+        <button class="btn btn-secondary" name="addEventBtn" (click)="addNewItem(newItem)">Add</button>
     </div>
 </form>
 
@@ -66,6 +66,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Update</button>
+        <button type="button" class="btn btn-outline-success" (click)="modal.close('Save click'); update(selectedItem)">Update</button>
+        <button type="button" class="btn btn-outline-danger" (click)="modal.close('Save click'); delete(selectedItem)">Delete</button>
     </div>
 </ng-template>

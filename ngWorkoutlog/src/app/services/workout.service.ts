@@ -22,4 +22,14 @@ export class WorkoutService {
         })
       )
   }
+
+  delete(id:number){
+    return this.http.delete<void>(this.url + "/" + id)
+      .pipe(
+        catchError((err: any) => {
+          console.log(err);
+          return throwError('Error in WorkoutService.delete()');
+        })
+      )
+  }
 }
