@@ -24,8 +24,6 @@ export class HomeComponent implements OnInit {
     this.index();
   }
 
-
-
   open(content: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -49,11 +47,6 @@ export class HomeComponent implements OnInit {
     console.log(this.selectedItem);
   }
 
-  addNewItem(item: Exerciseset){
-    item.datetime = this.date.transform(Date.now(),"YYYY-MM-dd mm:ss:SS");
-    console.log(item);
-  }
-
   index(){
     this.workoutService.index().subscribe(
       (data) => {
@@ -66,14 +59,28 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  addNewItem(item: Exerciseset){
+    item.datetime = this.date.transform(Date.now(),"YYYY-MM-dd hh:mm:ss");
+    console.log(item);
+    this.workoutService.add(item).subscribe(
+      (data) => {
+        console.log("successfully added item");
+        console.log(data);
+        this.index();
+      },
+      (error) => {
+        console.log("Error in observable add()")
+      }
+
+    )
+  }
+
   update(item: Exerciseset){
     console.log("Updating item: ")
     console.log(item);
   }
 
   delete(item: Exerciseset){
-    console.log("Deleting item: ")
-    console.log(item);
     this.workoutService.delete(item.id).subscribe(
       (data) => {
         console.log("sucessfully deleted item")

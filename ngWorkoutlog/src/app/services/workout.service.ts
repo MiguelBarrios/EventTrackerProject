@@ -23,6 +23,16 @@ export class WorkoutService {
       )
   }
 
+ add(item:Exerciseset){
+    return this.http.post<Exerciseset>(this.url, item)
+      .pipe(
+        catchError((err: any) => {
+          console.log(err);
+          return throwError('Error in WorkoutService.add()');
+        })
+      )
+  }
+
   delete(id:number){
     return this.http.delete<void>(this.url + "/" + id)
       .pipe(
