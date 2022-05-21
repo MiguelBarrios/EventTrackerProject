@@ -1,1 +1,41 @@
+#pageContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 1%;
+    margin-right: 1%;
+    background-color: rgb(245, 245, 247);
+}
 
+#addEventContainer {
+    padding-left: 2%;
+    padding-right: 2%;
+    flex: 0 0 40%;
+}
+
+#tableContainer {
+    max-height: 400px;
+    overflow-x: scroll;
+    margin-bottom: 2%;
+    flex: 0 0 60%;
+    padding-right: 2%;
+}
+
+#addItemButtonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 15px;
+}
+
+#addEventForm {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#addEventHeaderContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

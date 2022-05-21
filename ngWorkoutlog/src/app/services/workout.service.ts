@@ -52,4 +52,14 @@ export class WorkoutService {
         })
       )
   }
+
+  getStats(){
+    return this.http.get<Object>(this.url + "/" + "stats")
+      .pipe(
+        catchError((err: any) => {
+          console.log(err);
+          return throwError('Error in WorkoutService.getStats()');
+        })
+      )
+  }
 }

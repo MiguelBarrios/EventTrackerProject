@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.index();
+    this.stats();
   }
 
   open(content: any) {
@@ -106,6 +107,17 @@ export class HomeComponent implements OnInit {
       },
       (error) => {
         console.log("Error in observable delete()")
+      }
+    )
+  }
+
+  stats(){
+    this.workoutService.getStats().subscribe(
+      (data) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log("Error in observable stats()")
       }
     )
   }
