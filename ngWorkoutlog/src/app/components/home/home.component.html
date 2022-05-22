@@ -49,9 +49,20 @@
         </table>
     </div>
 
-
 </div>
 
+<div *ngIf="distinctEx">
+    <h1>Summery</h1>
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" [ngModel]="selectedExercise" (ngModelChange)="renderCharts($event)">
+      <option selected>Open this select menu</option>
+      <option *ngFor="let item of distinctEx" value="{{item}}">{{item}}</option>
+    </select>
+</div>
+
+<!--Chart-->
+<div width="400" height="400">
+    <canvas id="canvas">{{chart}}</canvas>
+</div>
 
 
 

@@ -1,9 +1,11 @@
 import { WorkoutService } from './../../services/workout.service';
 import { Exerciseset } from './../../models/exerciseset';
 import { Component, OnInit } from '@angular/core';
-//import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { filter } from 'rxjs';
+import {Chart, registerables } from 'chart.js'
+
 
 @Component({
   selector: 'app-home',
@@ -12,8 +14,22 @@ import { DatePipe } from '@angular/common';
 })
 export class HomeComponent implements OnInit {
 
+  //-------- chart vars --------
+  result: any;
+  //Volume Per Day
+  coinPrice: any;
+  // Date
+  coinName: any;
+  chart: any;
+  //---------------------------
+
+
   closeResult = '';
   newItem: Exerciseset = new Exerciseset();
+  itemStats: Object | null = null;
+  distinctEx: string[] | null = null;
+  selectedExercise:string | null = null;
+  workoutdata: any[] | null = null;
 
   selectedItem: Exerciseset = new Exerciseset();
   selectedItemDate:string | null = null;
@@ -23,7 +39,9 @@ export class HomeComponent implements OnInit {
   items:Exerciseset[] = [];
 
   constructor(private workoutService:WorkoutService, private modalService: NgbModal,
-      private date:DatePipe) { }
+      private date:DatePipe) {
+        Chart.register(...registerables);
+       }
 
   ngOnInit(): void {
     this.index();
@@ -60,7 +78,6 @@ export class HomeComponent implements OnInit {
     this.workoutService.index().subscribe(
       (data) => {
         this.items = data;
-        console.log(this.items);
       },
       (error) => {
         console.error("Error in Home component.index()");
@@ -114,11 +131,61 @@ export class HomeComponent implements OnInit {
   stats(){
     this.workoutService.getStats().subscribe(
       (data) => {
-        console.log(data);
+        this.result = data;
+        console.log("** Result **")
+        console.log(this.result);
+        this.distinctEx = this.result.distinctExercies;
+        console.log(this.distinctEx);
       },
       (error) => {
         console.log("Error in observable stats()")
       }
     )
   }
+
+  renderCharts(exerciseName:Event){
+
+    console.log("render charts");
+    console.log(exerciseName);
+    let tmp  = this.result.totalVolumePerExerciesPerDay.filter(function(item: Event[]){
+      return item[2] === exerciseName;
+    });
+
+    this.coinPrice = tmp.map(function(item: any[]){
+      return item[1];
+    })
+    console.log(this.coinPrice);
+    this.coinName = tmp.map(function(item:any[]){
+      return item[0];
+    })
+
+    //Show charts
+    this.chart = new Chart('canvas', {
+      type: 'line',
+      data: {
+        labels: this.coinName,
+        datasets:[
+          {
+            label: 'volume',
+            data: this.coinPrice,
+            borderWidth: 3,
+            fill:false,
+            backgroundColor: 'rgba(93,175,89,0.1)',
+            borderColor: '#3e95cd'
+          }
+        ]
+      }
+    })
+  }
+
+  addData(label: any, data: any) {
+    this.chart.data.labels.push(label);
+    this.chart.data.datasets.forEach((dataset: { data: any[]; }) => {
+        dataset.data.push(data);
+    });
+    this.chart.update();
+}
+
+
+
 }
