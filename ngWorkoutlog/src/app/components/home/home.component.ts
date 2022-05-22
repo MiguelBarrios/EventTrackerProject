@@ -35,6 +35,9 @@ export class HomeComponent implements OnInit {
   selectedItemDate:string | null = null;
   selectedItemTime:string | null = null;
 
+  selectedSummeryItem: Event | null | string= null;
+  selectedSummeryItemTotalVolume: string | null = null;
+
 
   items:Exerciseset[] = [];
 
@@ -52,6 +55,16 @@ export class HomeComponent implements OnInit {
     if(this.distinctEx){
 
     let exerciseName = this.distinctEx[0];
+    this.selectedSummeryItem = exerciseName;
+    this.selectedSummeryItem = exerciseName;
+    var volumeData = this.result.totalVolumePerExercise;
+    for(let i = 0; i < volumeData.length; ++i){
+      if(volumeData[i][0] == exerciseName){
+        this.selectedSummeryItemTotalVolume = volumeData[i][1];
+        break;
+      }
+    }
+
     let tmp  = this.result.totalVolumePerExerciesPerDay.filter(function(item: string[]){
       return item[2] == exerciseName;
     });
@@ -173,6 +186,14 @@ export class HomeComponent implements OnInit {
 
   renderCharts(exerciseName:Event){
     this.chart.destroy();
+    this.selectedSummeryItem = exerciseName;
+    var volumeData = this.result.totalVolumePerExercise;
+    for(let i = 0; i < volumeData.length; ++i){
+      if(volumeData[i][0] == exerciseName){
+        this.selectedSummeryItemTotalVolume = volumeData[i][1];
+        break;
+      }
+    }
 
     let tmp  = this.result.totalVolumePerExerciesPerDay.filter(function(item: Event[]){
       return item[2] === exerciseName;
