@@ -17,9 +17,9 @@ export class HomeComponent implements OnInit {
   //-------- chart vars --------
   result: any;
   //Volume Per Day
-  coinPrice: any;
+  volumePerDay: any;
   // Date
-  coinName: any;
+  workoutDate: any;
   chart: any;
   //---------------------------
 
@@ -48,6 +48,43 @@ export class HomeComponent implements OnInit {
     this.stats();
   }
 
+  createChart(){
+    if(this.distinctEx){
+
+    let exerciseName = this.distinctEx[0];
+    let tmp  = this.result.totalVolumePerExerciesPerDay.filter(function(item: string[]){
+      return item[2] == exerciseName;
+    });
+
+    this.volumePerDay = tmp.map(function(item: any[]){
+      return item[1];
+    })
+    this.workoutDate = tmp.map(function(item:any[]){
+      return item[0];
+    })
+
+    //Show charts
+    this.chart = new Chart('canvas', {
+      type: 'line',
+      data: {
+        labels: this.workoutDate,
+        datasets:[
+          {
+            label: 'volume',
+            data: this.volumePerDay,
+            borderWidth: 3,
+            fill:false,
+            backgroundColor: 'rgba(93,175,89,0.1)',
+            borderColor: '#3e95cd'
+          }
+        ]
+      }
+    })
+
+    }
+
+  }
+
   open(content: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -68,10 +105,8 @@ export class HomeComponent implements OnInit {
 
   loadSelected(item:Exerciseset){
     this.selectedItem = item;
-    console.log(this.selectedItem);
     this.selectedItemDate = this.date.transform(this.selectedItem.datetime,"YYYY-MM-dd");
     this.selectedItemTime = this.date.transform(this.selectedItem.datetime,"hh:mm:ss");
-
   }
 
   index(){
@@ -87,11 +122,8 @@ export class HomeComponent implements OnInit {
 
   addNewItem(item: Exerciseset){
     item.datetime = this.date.transform(Date.now(),"YYYY-MM-dd hh:mm:ss");
-    console.log(item);
     this.workoutService.add(item).subscribe(
       (data) => {
-        console.log("successfully added item");
-        console.log(data);
         this.index();
       },
       (error) => {
@@ -103,8 +135,6 @@ export class HomeComponent implements OnInit {
 
   update(item: Exerciseset){
     item.datetime = this.selectedItemDate + " " + this.selectedItemTime;
-    console.log("Updating item: ")
-    console.log(item);
     this.workoutService.update(item).subscribe(
       (data) => {
         console.log("sucessfully deleted item")
@@ -132,10 +162,8 @@ export class HomeComponent implements OnInit {
     this.workoutService.getStats().subscribe(
       (data) => {
         this.result = data;
-        console.log("** Result **")
-        console.log(this.result);
         this.distinctEx = this.result.distinctExercies;
-        console.log(this.distinctEx);
+        this.createChart();
       },
       (error) => {
         console.log("Error in observable stats()")
@@ -144,18 +172,16 @@ export class HomeComponent implements OnInit {
   }
 
   renderCharts(exerciseName:Event){
+    this.chart.destroy();
 
-    console.log("render charts");
-    console.log(exerciseName);
     let tmp  = this.result.totalVolumePerExerciesPerDay.filter(function(item: Event[]){
       return item[2] === exerciseName;
     });
 
-    this.coinPrice = tmp.map(function(item: any[]){
+    this.volumePerDay = tmp.map(function(item: any[]){
       return item[1];
     })
-    console.log(this.coinPrice);
-    this.coinName = tmp.map(function(item:any[]){
+    this.workoutDate = tmp.map(function(item:any[]){
       return item[0];
     })
 
@@ -163,11 +189,11 @@ export class HomeComponent implements OnInit {
     this.chart = new Chart('canvas', {
       type: 'line',
       data: {
-        labels: this.coinName,
+        labels: this.workoutDate,
         datasets:[
           {
             label: 'volume',
-            data: this.coinPrice,
+            data: this.volumePerDay,
             borderWidth: 3,
             fill:false,
             backgroundColor: 'rgba(93,175,89,0.1)',
