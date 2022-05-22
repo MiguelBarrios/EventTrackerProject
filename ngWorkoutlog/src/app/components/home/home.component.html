@@ -38,7 +38,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of items" (click)="loadSelected(item); open(updateItem)">
+                <tr *ngFor="let item of items.reverse()" (click)="loadSelected(item); open(updateItem)">
                     <td>{{item.exerciseName}}</td>
                     <td>{{item.weight}}</td>
                     <td>{{item.reps}}</td>
@@ -51,18 +51,30 @@
 
 </div>
 
-<div *ngIf="distinctEx">
-    <h1>Summery</h1>
-    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" [ngModel]="selectedExercise" (ngModelChange)="renderCharts($event)">
-      <option selected>Open this select menu</option>
-      <option *ngFor="let item of distinctEx" value="{{item}}">{{item}}</option>
-    </select>
-</div>
+
 
 <!--Chart-->
-<div width="400" height="400">
-    <canvas id="canvas">{{chart}}</canvas>
+<div id="ExerciseSummeryContainer">
+    <div id="summeryContainer">
+        <div id="SummeryHeader">
+            <h1>Summery</h1>
+        </div>
+        <div *ngIf="distinctEx">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" [ngModel]="selectedExercise" (ngModelChange)="renderCharts($event)">
+              <option selected>Open this select menu</option>
+              <option *ngFor="let item of distinctEx" value="{{item}}">{{item}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div width="400" height="400">
+        <h3>{{selectedSummeryItem}}</h3>
+        <h3>Total Volume: {{selectedSummeryItemTotalVolume}}</h3>
+        <canvas id="canvas">{{chart}}</canvas>
+    </div>
+
 </div>
+
 
 
 
