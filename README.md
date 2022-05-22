@@ -1,8 +1,7 @@
 # EventTrackerProject
 
 ## Description
-REST endpoint and front end to performing CRUD operations on a database containing workout information
-
+Workout log web app with REST endpoint to performing CRUD operations on a database containing workout information and Angular Frontend
 
 
 ## REST API Request's
@@ -35,5 +34,6 @@ REST endpoint and front end to performing CRUD operations on a database containi
 - JUnit
 - Java
 - JavaScript
+- Angular
 - XML HTTP Requests
-- Google Charts
+- Charts.js
